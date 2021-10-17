@@ -1,4 +1,5 @@
 import React from 'react';
+import perfil from '../../media/profile.jpeg'
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Admin = () => {

@@ -28,54 +28,56 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 function App() {
   return (
     <Auth0Provider
-    domain="ezequiellr.us.auth0.com"
-    clientId="inL4B5h8Ys4KPjo0gXaDIDMajaiSCv1C"
-    redirectUri="http:localhost:3000/admin/">
+      domain="ezequiellr.us.auth0.com"
+      clientId="0b1BbovaR2Sm4kaPTWwnNgr13Fayd0fV"
+      redirectUri="http://localhost:3000/admin"
+      audience='autenticacion-focus-tech'>
 
-    <div className='App'>
-      <Router>
-        <Switch>
-          <Route path={['/admin', '/admin/productos', '/admin/usuarios' ]}>
-            <PrivateLayout>
-              <Switch>
-                <Route path='/admin/productos'>
-                  <Productos/>
-                </Route>  
-                <Route path='/admin/ventas'>
-                  <Ventas/>
+      <div className='App'>
+        <Router>
+          <Switch>
+            <Route path={['/admin', '/admin/productos', '/admin/usuarios' ]}>
+              <PrivateLayout>
+                <Switch>
+                  <Route path='/admin/productos'>
+                    <Productos/>
+                  </Route>  
+                  <Route path='/admin/ventas'>
+                    <Ventas/>
+                  </Route>
+                  <Route path='/admin/usuarios'>
+                    <Usuarios/>
+                  </Route>
+                  <Route path='/admin'>
+                    <Admin />
+                  </Route>
+                </Switch>
+              </PrivateLayout>
+            </Route>
+            {/* <Route path={['/login', '/registro']}>
+              <AuthLayout>
+                <Switch>
+                  <Route path='/login'>
+                    <Login />
+                  </Route>
+                  <Route path='/registro'>
+                    <Registro />
+                  </Route>
+                </Switch>
+              </AuthLayout>
+            </Route> */}
+            <Route path={['/']}>
+              <PublicLayout>
+                <Route path='/'>
+                  <Index />
                 </Route>
-                <Route path='/admin/usuarios'>
-                  <Usuarios/>
-                </Route>
-                <Route exact path='/admin'>
-                  <Admin />
-                </Route>
-              </Switch>
-            </PrivateLayout>
-          </Route>
-          <Route path={['/login', '/registro']}>
-            <AuthLayout>
-              <Switch>
-                <Route path='/login'>
-                  <Login />
-                </Route>
-                <Route path='/registro'>
-                  <Registro />
-                </Route>
-              </Switch>
-            </AuthLayout>
-          </Route>
-          <Route path={['/']}>
-            <PublicLayout>
-              <Route path='/'>
-                <Index />
-              </Route>
-            </PublicLayout>
-          </Route>
-        </Switch>
-      </Router>
-    </div>
-    </Auth0Provider>
+              </PublicLayout>
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+
+  </Auth0Provider>
   );
 }
 
