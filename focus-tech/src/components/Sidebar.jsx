@@ -1,10 +1,15 @@
 import React from 'react';
 import Logo from '../media/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Sidebar = () => {
+  const { logout } = useAuth0();
+  const cerrarSesion = () => {
+    logout({ returnTo: 'http://localhost:3000/' });
+    localStorage.setItem('token', null);
+  };
   return (
-    
 
 
 <div class="min-h-screen flex flex-row fondo1  text-gray-300">
@@ -24,7 +29,7 @@ const Sidebar = () => {
         </Link> 
       </li>
       <li>
-        <Link to='/admin/Usuarios'>
+        <Link to='/admin/Usuarios' >
           <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-gray-500">
             <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="fas fa-users"></i></span>
             <span class="text-sm font-medium">Usuarios</span>
@@ -51,12 +56,12 @@ const Sidebar = () => {
       
       
       <li>
-        <Link to='/'>
+        
           <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-red-500 mt-10">
             <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="bx bx-log-out"></i></span>
-            <span class="text-sm font-medium ">Cerrar Sesión</span>
+            <span class="text-sm font-medium " onClick={() => cerrarSesion()}>Cerrar Sesión</span>
           </a>
-        </Link>
+        
       </li>
     </ul>
   </div>

@@ -1,7 +1,8 @@
 import React from 'react';
-import perfil from '../../media/profile.jpeg'
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Admin = () => {
+  const { user } = useAuth0();
   return <div>
         <section className="relative block" style={{ height: "500px" }}>
           <h1 className="pt-20 mb-0 text-xl text-gray-800 text-center">¡Bienvenido!</h1>
@@ -28,8 +29,8 @@ const Admin = () => {
                 <div className="flex flex-wrap justify-center">
                   <div  className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative">
-                      <img alt="..." src={perfil} class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
-                        style={{ maxWidth: "150px" }}/>
+                      <img alt="..." src={user.picture} class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
+                        style={{ maxWidth: "250px" }}/>
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -41,12 +42,12 @@ const Admin = () => {
                 </div>
               </div>
               <div className="text-center mt-12">
-                <h3 className="text-4xl font-semibold leading-normal mb-2 text-gray-800 mb-2">Administrador</h3>
+                <h3 className="text-4xl font-semibold leading-normal mb-2 text-gray-800">{user.name}</h3>
                 <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>Colombia
                 </div>
                 <div className="mb-2 text-gray-700 mt-10">
-                  <i className="fas fa-at mr-2 text-lg text-gray-500"></i>aministrador@mysolutionstech.com
+                  <i className="fas fa-at mr-2 text-lg text-gray-500"></i>{user.email}
                 </div>
               </div>
             </div>

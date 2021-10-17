@@ -10,7 +10,7 @@ const Footer = () => {
               className="mx-11 transform hover:translate-y-1 transition-transform ease-in duration-200">
                 <img class="fill-current ml-2 w-14 items-center " src={MinTic} alt="MinTic logo" /></a>
             <a href="https://github.com/FOCUS-TECH-MisionTic" className="transform hover:translate-y-1 transition-transform ease-in duration-200 mx-11"><i class="fab fa-github w-6"></i>Proyecto Ciclo 3.</a>
-            <div className="mx-11">Ezequiel López.</div>
+            <a href="https://github.com/ezequiellr" className="transform hover:translate-y-1 transition-transform ease-in duration-200 mx-11">Ezequiel López.</a>
         </div>
     </footer>
   </div>;
