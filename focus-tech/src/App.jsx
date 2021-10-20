@@ -12,8 +12,8 @@ import Admin from './pages/admin/Index';
 import Productos from './pages/admin/Productos';
 import Ventas from './pages/admin/Ventas';
 import Usuarios from './pages/admin/Usuarios';
-import Login from './pages/auth/Login';
-import Registro from './pages/auth/Registro';
+import Error404 from "pages/auth/Error404";
+
 
 //Styles
 import './styles/styles.css'
@@ -36,6 +36,7 @@ function App() {
       <div className='App'>
         <Router>
           <Switch>
+            
             <Route path={['/admin', '/admin/productos', '/admin/usuarios' ]}>
               <PrivateLayout>
                 <Switch>
@@ -54,25 +55,23 @@ function App() {
                 </Switch>
               </PrivateLayout>
             </Route>
-            {/* <Route path={['/login', '/registro']}>
-              <AuthLayout>
-                <Switch>
-                  <Route path='/login'>
-                    <Login />
-                  </Route>
-                  <Route path='/registro'>
-                    <Registro />
-                  </Route>
-                </Switch>
-              </AuthLayout>
-            </Route> */}
-            <Route path={['/']}>
+            
+            <Route exact path={['/']}>
               <PublicLayout>
-                <Route path='/'>
+                <Route exact path='/'>
                   <Index />
                 </Route>
               </PublicLayout>
             </Route>
+            
+            <Route path={['*']}>
+              <AuthLayout>
+                <Route path='*'>
+                  <Error404/>
+                </Route>
+              </AuthLayout>
+            </Route>
+
           </Switch>
         </Router>
       </div>
@@ -82,3 +81,4 @@ function App() {
 }
 
 export default App;
+              

@@ -15,14 +15,14 @@ import procesador6 from '../media/Procesador06.jpeg';
 const Index = () => {
   return <div>
     <section id="banner">
-            <div className="caja1 bg-black flex block flex-col pt-16 pb-32  content-center items-center justify-center">
+            <div className="inner bg-black flex block flex-col pt-16 pb-32  content-center items-center justify-center">
                 <div ><img src={logo} alt="logo" width="280" /></div>
                 <h2 className="mt-8 py-2 text-5xl fuente font-bold text-gray-100">¡Potencia A Tu Alcance!</h2>
                 <p className="mt-4 border-t-2 pb-64 border-gray-600 border-opacity-50 text-xl  flex-shrink pt-2 w-3/5 h-16 text-center text-gray-100">Con el mejor rendimiento en la industria, poderosas funcionalidades y una eficiencia increíble, nuestros prosesadores diseñados específicamente para tu dispositivo.</p>
             </div>    
         </section>
        
-        <section id="trabajo" class="caja3 text-gray-100 wrapper spotlight style1">
+        <section id="trabajo" class=" text-gray-100 wrapper spotlight style1">
             <div className="inner">
                 <a href="#" class="image"><img src={safe} alt="" /></a>
                 <div className="content">
@@ -32,7 +32,7 @@ const Index = () => {
             </div>
         </section>
 
-        <section className="caja3 text-gray-100 wrapper alt spotlight style2">
+        <section className=" text-gray-100 wrapper alt spotlight style2">
             <div className="inner">
                 <a href="#" class="image"><img src={laptop} alt="" /></a>
                 <div className="content">
@@ -43,7 +43,7 @@ const Index = () => {
             </div>
         </section>
 
-        <section class="caja2 text-gray-100 wrapper spotlight style3">
+        <section class=" text-gray-100 wrapper spotlight style3">
             <div class="inner">
                 <a href="#" class="image"><img src={cell} alt="" /></a>
                 <div class="content">
@@ -54,7 +54,7 @@ const Index = () => {
             </div>
         </section>
 
-        <section class="caja4 text-center text-gray-100">
+        <section class="text-center text-gray-100">
             <h1 id="procesadores" class="fuente pt-48 text-5xl">Nuestros Procesadores</h1>
             <p class="mx-2 my-2 text-lg">Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non.</p>
             <div class="grid grid-cols-2 mx-48 pt-20 pb-48">
