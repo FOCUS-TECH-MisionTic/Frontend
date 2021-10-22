@@ -2,6 +2,7 @@ import React from 'react';
 import Logo from '../media/logo.png';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth0 } from "@auth0/auth0-react";
+import PrivateComponent from 'components/PrivateComponent';
 
 const Sidebar = () => {
   const { logout } = useAuth0();
@@ -29,28 +30,34 @@ const Sidebar = () => {
         </Link> 
       </li>
       <li>
-        <Link to='/admin/Usuarios' >
-          <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-gray-500">
-            <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="fas fa-users"></i></span>
-            <span class="text-sm font-medium">Usuarios</span>
-          </a>
-        </Link>
+        <PrivateComponent roleList={['Administrador']}>
+          <Link to='/admin/Usuarios' >
+            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-gray-500">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="fas fa-users"></i></span>
+              <span class="text-sm font-medium">Usuarios</span>
+            </a>
+          </Link>
+          </PrivateComponent>  
       </li>
       <li>
-      <Link to='/admin/Productos'>
-          <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-gray-500">
-            <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="fas fa-microchip"></i></span>
-            <span class="text-sm font-medium">Productos</span>
-          </a>
-      </Link>    
+      <PrivateComponent roleList={['Administrador','Vendedor','Cliente']}>  
+        <Link to='/admin/Productos'>
+            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-gray-500">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="fas fa-microchip"></i></span>
+              <span class="text-sm font-medium">Productos</span>
+            </a>
+        </Link>
+      </PrivateComponent>    
       </li>
       <li>
-        <Link to='/admin/Ventas'>
-          <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-gray-500">
-            <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="fas fa-cash-register"></i></span>
-            <span class="text-sm font-medium">Ventas</span>
-          </a>
-        </Link>
+        <PrivateComponent roleList={['Administrador', 'Vendedor']}>
+          <Link to='/admin/Ventas'>
+            <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-300 hover:text-gray-500">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-200"><i class="fas fa-cash-register"></i></span>
+              <span class="text-sm font-medium">Ventas</span>
+            </a>
+          </Link>
+          </PrivateComponent>
       </li>
       
       

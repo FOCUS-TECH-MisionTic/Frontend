@@ -2,23 +2,34 @@ import React, { useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import ReactLoading from 'react-loading';
 import AuthLayout from "layouts/AuthLayout";
+import { obtenerDatosUsuario } from 'utils/api';
+import { useUser } from 'context/userContext';
 
 const PrivateRoute = ({ children }) => {
-    const { isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
+    const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+    const { setUserData } = useUser();
   
     useEffect(() => {
       const fetchAuth0Token = async () => {
-        // si se quieren hacer validaciones con el token:
-        // if (localStorage.getItem('token')) {
-        //   // validar fecha de expiracion del token
-        // } else {
-        //   // pedir token
-        // }
+        
+        //Pedir Toke a Auth0
         const accessToken = await getAccessTokenSilently({
           audience: `autenticacion-focus-tech`,
         });
+        //Recibir Token de Auth0
         localStorage.setItem('token', accessToken);
-      };
+        console.log('Token', accessToken);
+        await obtenerDatosUsuario (
+          (response) =>{
+            console.log ('Respuesta con datos del usuario',response);
+            setUserData (response.data);
+        }, 
+        (err)=>{
+          console.log('Error', err);
+        }
+      );
+    };
+
       if (isAuthenticated) {
         fetchAuth0Token();
       }
@@ -56,26 +67,4 @@ const PrivateRoute = ({ children }) => {
 
 
 
-  //   return isAuthenticated ? (
-  //     <>{children}</>
-  //   ) : (
-  //     <div>
-  //       <div className='text-9xl text-red-500 '>No estas autorizado para ver este sitio.</div>
-  //       <Link to='/'>
-  //         <span className='text-blue-500 font-bold'>Llévame al home</span>
-  //       </Link>
-  //     </div>
-  //   );
-  // };
-  
-    
-    // return (isAuthenticated ?
-    // <>{children}</>:
-    // <div>
-    //     <AuthLayout>
-    //     <h1 className='text-5xl text-center font-bold text-red-600 py-40 w-full'>No Puedes Acceder Sin Autenticarte Primero</h1>   
-    //     </AuthLayout>
-    // </div>
-    // );
-        
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState} from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {nanoid} from 'nanoid';
@@ -89,9 +89,8 @@ const TablaUsuarios = ({ listaUsuarios, setEjecutarConsulta }) => {
           <thead>
             <tr>
               <th className="fondo1 text-gray-300 w-32"> ID Usuario</th>
-              <th className="fondo1 text-gray-300 w-44"> Nombre</th>
-              <th className="fondo1 text-gray-300 w-36">Apellido</th>
-              <th className="fondo1 text-gray-300 w-36">Correo</th>
+              <th className="fondo1 text-gray-300 w-44"> Nombre Completo</th>
+              <th className="fondo1 text-gray-300 w-32">Correo</th>
               <th className="fondo1 text-gray-300 w-32">Rol</th> 
               <th className="fondo1 text-gray-300 w-32">Estado</th> 
               <th className="fondo1 text-gray-300 w-36">Editar</th>
@@ -115,9 +114,9 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta})  => {
   const [edit, setEdit] = useState(false)
   const [infoNuevoUsuario, setInfoNuevoUsuario] = useState({
     _id: usuario._id,
-    nombre: usuario.nombre,
-    apellido: usuario.apellido,
-    correo: usuario.correo,
+    name: usuario.name,
+    
+    email: usuario.email,
     rol: usuario.rol,
     estado: usuario.estado,
   });
@@ -127,9 +126,8 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta})  => {
     await editarUsuario(
       usuario._id,
       {
-        nombre: infoNuevoUsuario.nombre,
-        apellido: infoNuevoUsuario.apellido,
-        correo: infoNuevoUsuario.correo,
+        name: infoNuevoUsuario.name,
+        email: infoNuevoUsuario.email,
         rol: infoNuevoUsuario.rol,
         estado: infoNuevoUsuario.estado,
         
@@ -155,13 +153,18 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta})  => {
         <>
         
           <td className='text-center'>{infoNuevoUsuario._id.slice(20)}</td>
-          <td className='text-center'>{infoNuevoUsuario.nombre}</td>
-          <td className='text-center'>{infoNuevoUsuario.apellido}</td>
+          
+          <td><input 
+            type="text" 
+            className="bg-gray-50 border border-gray-600 p-1 text-center rounded-lg m-1 w-full"
+            value={infoNuevoUsuario.name}
+            onChange={(e) => setInfoNuevoUsuario({ ...infoNuevoUsuario, name: e.target.value })}/>
+          </td>
           <td><input 
             type="email" 
             className="bg-gray-50 border border-gray-600 p-1 text-center rounded-lg m-1 w-full"
-            value={infoNuevoUsuario.correo}
-            onChange={(e) => setInfoNuevoUsuario({ ...infoNuevoUsuario, correo: e.target.value })}/>
+            value={infoNuevoUsuario.email}
+            onChange={(e) => setInfoNuevoUsuario({ ...infoNuevoUsuario, email: e.target.value })}/>
           </td>
           
           <td>
@@ -178,6 +181,7 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta})  => {
                 <option value="Administrador">Administrador</option>
                 <option value="Vendedor">Vendedor</option>
                 <option value="Cliente">Cliente</option>
+                <option value="Sin Rol">Sin Rol</option>
               </select>
             </form>
           </td>
@@ -205,9 +209,8 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta})  => {
       ) :(
       <>
           <td className=" text-center text-gray-800">{usuario._id.slice(20)}</td>
-          <td className=" text-center text-gray-800">{usuario.nombre}</td>
-          <td className=" text-center text-gray-800">{usuario.apellido}</td>
-          <td className=" text-center text-gray-800">{usuario.correo}</td>
+          <td className=" text-center text-gray-800">{usuario.name}</td>
+          <td className=" text-center text-gray-800">{usuario.email}</td>
           <td className=" text-center text-gray-800">{usuario.rol}</td>
           <td className=" text-center text-gray-800">{usuario.estado}</td>
           

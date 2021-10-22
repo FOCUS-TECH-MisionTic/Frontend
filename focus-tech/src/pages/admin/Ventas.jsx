@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { obtenerVentas, crearVenta, editarVenta, eliminarVenta } from 'utils/api';
 import { obtenerProductos } from 'utils/api';
 import { obtenerUsuarios } from 'utils/api';
+import PrivateComponent from 'components/PrivateComponent';
+
 
 const Ventas = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -11,7 +13,6 @@ const Ventas = () => {
   const [textoBoton, setTextoBoton] = useState('Agregar Nueva Venta');
   const [ejecutarConsulta, setEjecutarConsulta] = useState(true);
   
-
   useEffect(() => {
     console.log('consulta', ejecutarConsulta);
     if (ejecutarConsulta) {
@@ -76,6 +77,7 @@ const TablaVentas = ({ listaVentas, setEjecutarConsulta }) => {
   const [busqueda, setBusqueda] = useState('');
   const [ventasFiltrados, setVentasFiltrados] = useState(listaVentas);
   
+  
   useEffect(() => {
     setVentasFiltrados(
       listaVentas.filter((elemento) => {
@@ -124,6 +126,38 @@ const TablaVentas = ({ listaVentas, setEjecutarConsulta }) => {
 
 const FilaVentas = ({venta, setEjecutarConsulta})  => {
   const [edit, setEdit] = useState(false)
+  const [usuarios, setUsuarios] = useState([]);
+  const [productos, setProductos] = useState([]);
+  
+  useEffect(() => { 
+         const fetchUsuarios = async () => {
+           await obtenerUsuarios(
+             (response) => {
+               console.log('respuesta de usuarios', response);
+               setUsuarios(response.data);
+             },
+             (error) => {
+               console.error(error);
+             }
+           );
+         };
+         const fetchProductos = async () => {
+           await obtenerProductos(
+             (response) => {
+               setProductos(response.data);
+             },
+             (error) => {
+               console.error(error);
+             }
+           );
+         };
+        fetchUsuarios();
+        fetchProductos();
+    
+  }, []);
+  const listaVendedores = usuarios.filter(v => (v.rol === 'Vendedor') && (v.estado === 'Activo'));
+  const listaClientes = usuarios.filter(c => (c.rol === 'Cliente') && (c.estado === 'Activo'));
+  
   const [infoNuevaVenta, setInfoNuevaVenta] = useState({
     _id: venta._id,
     fecha: venta.fecha,
@@ -134,6 +168,7 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
     estado: venta.estado,
     total: venta.total,
   });
+
   const actualizarVenta = async () => {
     //enviar la info al backend
 
@@ -177,12 +212,8 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
         console.error(error);
         toast.error('Error Eliminando Venta');
       }
-    );
-  
-    
+    );  
   };
-  
-       
   return (
     <tr >
       {edit? (
@@ -195,45 +226,56 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
             value={infoNuevaVenta.fecha}
             onChange={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, fecha: e.target.value })}/>
           </td>
+
           <td>
-          <input 
-            type="text" 
-            className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
-            value={infoNuevaVenta.producto}
-            onChange={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, producto: e.target.value })}/>
+          <select
+              className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
+              name='producto'
+              onChange ={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, producto: e.target.value })}
+              defaultValue={infoNuevaVenta.producto}>
+                {productos.map((p) => {
+             return (
+               <option
+                 key={nanoid()}
+                 value={p.producto}
+               >{p.producto}</option>
+             );
+           })}
+            </select>
           </td>
-          <td><input 
+            
+          <td>
+            <input 
             type="number" 
             className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
             value={infoNuevaVenta.cantidad}
             onChange={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, cantidad: e.target.value })}/>
           </td>
+
           <td>
             <select
               className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
               name='cliente'
               onChange ={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, cliente: e.target.value })}
-              defaultValue={infoNuevaVenta.producto}>
-              <option value="Camila Parra">Camila Parra</option>
-              <option value="Juan Pérez">Juan Pérez</option>
-              <option value="Pedro Jiménez">Pedro Jiménez</option>
-              <option value="Ramiro Cuartas">Ramiro Cuartas</option>
+              defaultValue={infoNuevaVenta.cliente}>
+                {listaClientes.map((el) => {
+              return <option key={nanoid()}  value={el.name}>{`${el.name}`}</option>;
+              })}
             </select>
           </td>
+          
           <td>
-          <select
+            <select
               className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
               name='vendedor'
-              onChange ={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, cliente: e.target.value })}
-              defaultValue={infoNuevaVenta.producto}>
-              <option value="Darío Álvarez">Darío Álvarez</option>
-              <option value="Esteban López">Esteban López</option>
-              <option value="Mariana Montoya">Mariana Montoya</option>
-              <option value="Martha Gómez">Martha Gómez</option>
-              
+              onChange ={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, vendedor: e.target.value })}
+              defaultValue={infoNuevaVenta.vendedor}>
+              {listaVendedores.map((el) => {
+              return <option key={nanoid()}  value={el.name}>{`${el.name}`}</option>;
+            })}
             </select>
-            
           </td>
+              
           <td>
           <label className='flex flex-col py-2 text-gray-800' htmlFor='estado'>  
             <select
@@ -252,7 +294,8 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
           </label>
           </td>
             
-          <td><input 
+          <td>
+            <input 
             type="number" 
             className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
             value={infoNuevaVenta.total}
@@ -293,10 +336,11 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
                   onClick={() => setEdit(!edit)}
                   className="fas fa-edit hover:text-yellow-600"/>
               
-                  
+                <PrivateComponent roleList={['Administrador']}>    
                 <i
                     onClick={() => borrarVenta()}
                     class="fas fa-trash text-gray-800 hover:text-red-500"/>
+                </PrivateComponent>
               </>
             )} 
             
@@ -309,17 +353,17 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
 };
 
 const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) => {
-  const [vendedores, setVendedores] = useState([]);
+  const form = useRef(null);
+  const [usuarios, setUsuarios] = useState([]);
   const [productos, setProductos] = useState([]);
   
-  const form = useRef(null);
 
   useEffect(() => { 
-         const fetchVendores = async () => {
+         const fetchUsuarios = async () => {
            await obtenerUsuarios(
              (response) => {
                console.log('respuesta de usuarios', response);
-               setVendedores(response.data);
+               setUsuarios(response.data);
              },
              (error) => {
                console.error(error);
@@ -336,10 +380,12 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
              }
            );
          };
-    
-         fetchVendores();
-         fetchProductos();
+        fetchUsuarios();
+        fetchProductos();
        }, []);
+
+  const listaVendedores = usuarios.filter(v => (v.rol === 'Vendedor') && (v.estado === 'Activo'));
+  const listaClientes = usuarios.filter(c => (c.rol === 'Cliente') && (c.estado === 'Activo'));
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -352,8 +398,7 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
     
     console.log('form data', nuevaVenta);
 
-    
-    await crearVenta(
+   await crearVenta(
       {
         fecha: nuevaVenta.fecha,
         producto: nuevaVenta.producto,
@@ -380,7 +425,8 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
     <div className='flex flex-col items-center justify-center'>
       <h2 className='text-2xl font-extrabold pb-4 text-gray-800'>Nueva Venta</h2>
       <form ref={form} onSubmit={submitForm} className='flex flex-col justify-center text-center pb-10'>
-      <label className='flex flex-col py-2 text-gray-800' htmlFor='fecha'>
+      
+        <label className='flex flex-col py-2 text-gray-800' htmlFor='fecha'>
           Fecha de Venta
           <input
             name='fecha'
@@ -422,6 +468,7 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
             placeholder='Ej: 2'
             required/>
         </label>
+
         <label className='flex flex-col py-2 text-gray-800' htmlFor='cliente'>
           Cliente
           <select
@@ -432,13 +479,12 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
             <option disabled value={0}>
               Elija una Opción
             </option>
-            <option>Juan Pérez</option>
-            <option>Julio Jiménez</option>
-            <option>Ramiro Cuartas</option>
-            <option>Julieta Parra</option>
-            
+            {listaClientes.map((el) => {
+              return <option key={nanoid()}  value={el.name}>{`${el.name}`}</option>;
+            })} 
           </select>
         </label>
+
         <label className='flex flex-col py-2 text-gray-800' htmlFor='vendedor'>
           Vendedor
           <select
@@ -449,12 +495,12 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
             <option disabled value={0}>
               Elija una Opción
             </option>
-            <option>Martha Gómez</option>
-            <option>Esteban López</option>
-            <option>Mariana Montoya</option>
-            <option>Darío Álvarez</option>
+            {listaVendedores.map((el) => {
+              return <option key={nanoid()}  value={el.name}>{`${el.name}`}</option>;
+            })}
           </select>
         </label>
+
         <label className='flex flex-col py-2 text-gray-800' htmlFor='estado'>
           Estado de la Venta
           <select
@@ -485,214 +531,13 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
         
         <button
           type='submit'
-          className='col-span-2 py-3 fondo1 font-bold  text-gray-300 p-2 rounded-full shadow-md hover:bg-blue-600'
-        >
+          className='col-span-2 py-3 fondo1 font-bold  text-gray-300 p-2 rounded-full shadow-md hover:bg-blue-600'>
           Crear Venta
         </button>
+
       </form>
     </div>
   );
 };
-
-//   useEffect(() => { 
-//     const fetchVendores = async () => {
-//       await obtenerUsuarios(
-//         (response) => {
-//           console.log('respuesta de usuarios', response);
-//           setVendedores(response.data);
-//         },
-//         (error) => {
-//           console.error(error);
-//         }
-//       );
-//     };
-//     const fetchProductos = async () => {
-//       await obtenerProductos(
-//         (response) => {
-//           setProductos(response.data);
-//         },
-//         (error) => {
-//           console.error(error);
-//         }
-//       );
-//     };
-
-//     fetchVendores();
-//     fetchProductos();
-//   }, []);
-
-  
-
-//   const submitForm = async (e) => {
-//     e.preventDefault();
-//     const fd = new FormData(form.current);
-
-//     const nuevaVenta = {};
-//     fd.forEach((value, key) => {
-//       nuevaVenta[key] = value;
-//     });
-
-//     console.log('form data', nuevaVenta);
-
-//     const listaProductos = Object.keys(nuevaVenta)
-//       .map((k) => {
-//         if (k.includes('producto')) {
-//           return productos.filter((v) => v._id === nuevaVenta[k])[0];
-//         }
-//         return null;
-//       })
-//       .filter((v) => v);
-
-      
-
-    
-    
-//     console.log('lista productos', listaProductos);
-    
-//     await crearVenta(
-//       {
-//         fecha: nuevaVenta.fecha,
-//         cantidad: nuevaVenta.cantidad,
-//         productos: nuevaVenta.listaProductos,
-//         vendedor: vendedores.filter((v) => v._id === nuevaVenta.vendedor)[0],
-//         cliente: nuevaVenta.cliente,
-//         estado: nuevaVenta.estado,
-//         total: nuevaVenta.total,
-        
-//       },
-//       (response) => {
-//         console.log(response.data);
-//         toast.success('Venta Creada Exitosamente');
-//         setMostrarTabla(true);
-//       },
-//       (error) => {
-//         console.error(error);
-//         toast.error('Error Creando Venta');
-//       }
-//     );
-//     setMostrarTabla(true);
-//   }; 
-
-//   return (
-//     <div className='flex flex-col items-center justify-center'>
-//       <h2 className='text-2xl font-extrabold pb-4 text-gray-800'>Nueva Venta</h2>
-//       <form ref={form} onSubmit={submitForm} className='flex flex-col justify-center text-center pb-10'>
-//       <label className='flex flex-col py-2 text-gray-800' htmlFor='fecha'>
-//         Fecha de Venta
-//         <input
-//           name='fecha'
-//           className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2 '
-//           type='date'
-//           placeholder='Ej: dd/mm/aaaa'
-//           required/>
-//       </label>
-
-//       <label className='flex flex-col py-2 text-gray-800' htmlFor='producto'>
-//         Producto
-//         <select
-//           className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-//           name="producto"
-//           required
-//           defaultValue={0}>
-//           <option disabled value={0}>
-//             Elija una Opción
-//           </option>
-//           {productos.map((p) => {
-//             return (
-//               <option
-//                 key={nanoid()}
-//                 value={p._id}
-//               >{p.producto}</option>
-//             );
-//           })}
-//           </select>
-//         </label>
-
-//         <label className='flex flex-col py-2 text-gray-800' htmlFor='cantidad'>    
-//           Cantidad
-//           <input
-//             name='cantidad'
-//             className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-//             type='number'
-//             min={1}
-//             max={100}
-//             placeholder='Ej: 2'
-//             required/>
-//         </label>
-        
-//         <label className='flex flex-col py-2 text-gray-800' htmlFor='cliente'>
-//           Cliente
-//           <select name='cliente' className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2' defaultValue='' required>
-//             <option disabled value=''>
-//               Seleccione un Cliente
-//             </option>
-//             {vendedores.map((el) => {
-//               return <option key={nanoid()} value={el._id}>{`${el.nombre} ${el.apellido}`}</option>;
-//             })}
-//           </select>
-//         </label>
-
-//         <label className='flex flex-col py-2 text-gray-800' htmlFor='vendedor'>
-//         Vendedor
-//         <select
-//           className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-//           name="vendedor"
-//           required
-//           defaultValue={0}>
-//           <option disabled value={0}>
-//             Elija una Opción
-//           </option>
-//           {vendedores.map((v) => {
-//             return (
-//               <option
-//                 key={nanoid()}
-//                 value={v._id}
-//               >{v.producto}</option>
-//             );
-//           })}
-//           </select>
-//         </label>
-
-
-//         <label className='flex flex-col py-2 text-gray-800' htmlFor='estado'>
-//           Estado de la Venta
-//           <select
-//             className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-//             name='estado'
-//             required
-//             defaultValue={0}>
-//             <option disabled value={0}>
-//               Elija una Opción
-//             </option>
-//             <option>En Proceso</option>
-//             <option>Entregada</option>
-//             <option>Cancelada</option>            
-//           </select>
-//         </label>
-        
-//         <label className='flex flex-col py-2 text-gray-800' htmlFor='total'>    
-//           Total Venta
-//           <input
-//             name='total'
-//             className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
-//             type='number'
-//             min={200}
-//             max={5000}
-//             placeholder='Ej: 230'
-//             required/>
-//         </label>
-        
-//         <button
-//           type='submit'
-//           className='col-span-2 py-3 fondo1 font-bold  text-gray-300 p-2 rounded-full shadow-md '
-//         >
-//           Crear Venta
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-
 
 export default Ventas;

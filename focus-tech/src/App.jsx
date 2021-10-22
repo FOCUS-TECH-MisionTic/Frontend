@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from 'react';
 import { Auth0Provider } from "@auth0/auth0-react";
 
 //Layouts
@@ -20,12 +21,14 @@ import './styles/styles.css'
 
 //Router
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { UserContext } from "context/userContext";
 
 
 
 
 
 function App() {
+  const [userData, setUserData] = useState({});
   return (
     <Auth0Provider
       domain="ezequiellr.us.auth0.com"
@@ -34,6 +37,9 @@ function App() {
       audience='autenticacion-focus-tech'>
 
       <div className='App'>
+        
+      <UserContext.Provider value={{ userData, setUserData }}>
+
         <Router>
           <Switch>
             
@@ -74,6 +80,8 @@ function App() {
 
           </Switch>
         </Router>
+      </UserContext.Provider>
+
       </div>
 
   </Auth0Provider>

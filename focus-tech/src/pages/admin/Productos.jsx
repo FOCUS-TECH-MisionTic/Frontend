@@ -3,6 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
 import { obtenerProductos, crearProducto, editarProducto, eliminarProducto } from 'utils/api';
 import 'react-toastify/dist/ReactToastify.css';
+import PrivateComponent from 'components/PrivateComponent';
 
 const Productos = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -49,6 +50,7 @@ const Productos = () => {
         <h2 className='text-3xl pt-12 pb-8 font-extrabold fuenteColor'>
           Administración de Productos
         </h2>
+        <PrivateComponent roleList={['Administrador']}>
         <button
           onClick={() => {
             setMostrarTabla(!mostrarTabla);
@@ -56,6 +58,7 @@ const Productos = () => {
           className={`shadow-md fondo1 text-gray-300 font-bold p-2 rounded m-6  self-center`}>
           {textoBoton}
         </button>
+        </PrivateComponent>
       </div>
       {mostrarTabla ? (
         <TablaProductos listaProductos={productos} setEjecutarConsulta={setEjecutarConsulta} />
@@ -102,7 +105,9 @@ const Productos = () => {
               <th className="fondo1  text-gray-300 w-28">Frecuencia</th>
               <th className="fondo1  text-gray-300 w-32">Precio USD</th>
               <th className="fondo1  text-gray-300 w-32">Estado</th>
-              <th className="fondo1  text-gray-300 w-24">Acciones</th>  
+              <PrivateComponent roleList={['Administrador']}>
+                <th className="fondo1  text-gray-300 w-24">Acciones</th>  
+              </PrivateComponent>
             </tr>
           </thead>
           <tbody>
@@ -248,32 +253,36 @@ const FilaProductos = ({producto, setEjecutarConsulta})  => {
           <td className=" text-center text-gray-800">{producto.estado}</td>
       </>  
         )}
+          <PrivateComponent roleList={['Administrador']}>
         <td>
-          <div className="flex w-full justify-around text-gray-800 ">
-            {edit? (
-              <>
-                <i
-                  onClick={() => actualizarProducto()} 
-                  className="fas fa-check hover:text-green-600"/>
-                <i
-                  onClick={() => setEdit(!edit)}
-                  className='fas fa-ban hover:text-yellow-700'/>
-              </>
-            ):(
-              <>
-                <i
-                  onClick={() => setEdit(!edit)}
-                  className="fas fa-edit hover:text-yellow-600"/>
+            <div className="flex w-full justify-around text-gray-800 ">
+              {edit? (
+                <>
+                  <i
+                    onClick={() => actualizarProducto()} 
+                    className="fas fa-check hover:text-green-600"/>
+                  <i
+                    onClick={() => setEdit(!edit)}
+                    className='fas fa-ban hover:text-yellow-700'/>
+                </>
+              ):(
+                <>
+                  <i
+                    onClick={() => setEdit(!edit)}
+                    className="fas fa-edit hover:text-yellow-600"/>
+                
+                    
+                  <i
+                      onClick={() => borrarProducto()}
+                      class="fas fa-trash text-gray-800 hover:text-red-500"/>
+                </>
+              )} 
               
-                  
-                <i
-                    onClick={() => borrarProducto()}
-                    class="fas fa-trash text-gray-800 hover:text-red-500"/>
-              </>
-            )} 
+            </div>
             
-          </div>
+
         </td>
+          </PrivateComponent>
       
     </tr>
 
