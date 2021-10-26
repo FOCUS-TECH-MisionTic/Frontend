@@ -13,19 +13,23 @@ const Ventas = () => {
   const [textoBoton, setTextoBoton] = useState('Agregar Nueva Venta');
   const [ejecutarConsulta, setEjecutarConsulta] = useState(true);
   
+  
+  
   useEffect(() => {
     console.log('consulta', ejecutarConsulta);
     if (ejecutarConsulta) {
       obtenerVentas(
         (response) => {
-          console.log('la respuesta que se recibio fue', response);
+          console.log('la respuesta Obtener Ventas', response);
           setVentas(response.data);
           setEjecutarConsulta(false);
+          
         },
         (error) => {
           console.error('Salio un error:', error);}
       );
     }
+    
   }, [ejecutarConsulta]);
 
   useEffect(() => {
@@ -54,7 +58,7 @@ const Ventas = () => {
           onClick={() => {
             setMostrarTabla(!mostrarTabla);
           }}
-          className={`shadow-md fondo1 text-gray-300 font-bold p-2 rounded m-6  self-center`}
+          className={`shadow-md fondo1 text-gray-300 font-bold p-2 rounded m-6  self-center hover:bg-black`}
         >
           {textoBoton}
         </button>
@@ -73,9 +77,11 @@ const Ventas = () => {
   );
 };
 
-const TablaVentas = ({ listaVentas, setEjecutarConsulta }) => {
+const TablaVentas = ({listaVentas, setEjecutarConsulta}) => {
   const [busqueda, setBusqueda] = useState('');
   const [ventasFiltrados, setVentasFiltrados] = useState(listaVentas);
+  const [sumaVentas,setSumaVentas] = useState (0);
+  
   
   
   useEffect(() => {
@@ -85,6 +91,61 @@ const TablaVentas = ({ listaVentas, setEjecutarConsulta }) => {
       })
     );
   }, [busqueda, listaVentas]);
+  
+  console.log('lista ventas', listaVentas)
+
+//  useEffect(()=>{ 
+//   const handlesumar =()=>{
+//     let totales = listaVentas.parse(listaVentas);
+//     const suma = totales.map((total)=>parseFloat(total.TOTALVENTAS))
+//     .reduce ((previous, current)=>{
+//       return previous+current;
+//     },0);
+//     setSumaVentas (suma);
+//   };
+//   handlesumar();
+// });
+
+// useEffect(()=>{ 
+  
+//   let totales = JSON.parse(listaVentas);
+//   console.log('Totales', totales)
+//   let suma=0;
+//     totales.forEach((s)=>{
+//        suma = suma + totales.total;
+//      });
+//      setSumaVentas (suma);
+//      console.log ('Suma Ventas', suma);
+//   }, );
+
+
+
+  // function sumaVentas (listaVentas, fn){
+    
+  //   listaVentas = JSON.parse(listaVentas);
+  //   return  listaVentas.map(typeof fn === 'function' ? fn : d => d[fn]).reduce((acomulador, valor) => acomulador + valor, 0);
+  // };
+
+//   try {
+//     console.log('Suma Ventas', sumaVentas(listaVentas, 'total'));
+       
+// } catch (e) {
+//     console.log(`Error: ${e.message}`);
+// }
+// const sumaVentas =()=>{
+//   let totales = listaVentas.parse(listaVentas);
+//   var suma = 0;
+
+// }
+    
+// let totales = JSON.parse(listaVentas) ;
+
+// const sumaVentas = totales.reduce((sum, value)=>(typeof value.total == "number"? sum + value.total : sum), 0);
+// console.log ('Sumatoria',sumaVentas);
+  
+
+  
+
   
   
   return (
@@ -103,6 +164,7 @@ const TablaVentas = ({ listaVentas, setEjecutarConsulta }) => {
               <th className="fondo1  text-gray-300 w-32">Fecha</th>
               <th className="fondo1  text-gray-300 w-44">Producto</th>
               <th className="fondo1  text-gray-300 w-32">Cantidad</th>
+              <th className="fondo1  text-gray-300 w-32">Valor Unidad</th>
               <th className="fondo1  text-gray-300 w-44">Cliente</th>
               <th className="fondo1  text-gray-300 w-36">Vendedor</th>
               <th className="fondo1  text-gray-300 w-32">Estado</th>
@@ -112,6 +174,7 @@ const TablaVentas = ({ listaVentas, setEjecutarConsulta }) => {
           </thead>
           <tbody>
             {ventasFiltrados.map((venta) => {
+              console.log('Ventas Filtardo', ventasFiltrados)
               return <FilaVentas 
                 key={nanoid()} 
                 venta={venta}
@@ -119,7 +182,10 @@ const TablaVentas = ({ listaVentas, setEjecutarConsulta }) => {
             })}
           </tbody>
         </table>
-      
+       {/* <div className='flex font-extrabold pb-10 pt-6'>
+      <h1 >Total Ventas:</h1>
+      <span>{sumaVentas}</span>
+         </div>  */}
     </div>
   );
 };
@@ -128,6 +194,8 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
   const [edit, setEdit] = useState(false)
   const [usuarios, setUsuarios] = useState([]);
   const [productos, setProductos] = useState([]);
+   
+  
   
   useEffect(() => { 
          const fetchUsuarios = async () => {
@@ -155,19 +223,27 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
         fetchProductos();
     
   }, []);
+  
   const listaVendedores = usuarios.filter(v => (v.rol === 'Vendedor') && (v.estado === 'Activo'));
   const listaClientes = usuarios.filter(c => (c.rol === 'Cliente') && (c.estado === 'Activo'));
+  const listaProductos = productos.filter(p => (p.estado === 'Disponible'));
+
+  
   
   const [infoNuevaVenta, setInfoNuevaVenta] = useState({
     _id: venta._id,
     fecha: venta.fecha,
     producto: venta.producto,
     cantidad: venta.cantidad,
+    unidad: venta.unidad,
     cliente: venta.cliente,
     vendedor: venta.vendedor,
     estado: venta.estado,
     total: venta.total,
   });
+
+  
+  
 
   const actualizarVenta = async () => {
     //enviar la info al backend
@@ -178,6 +254,7 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
         fecha: infoNuevaVenta.fecha,
         producto: infoNuevaVenta.producto,
         cantidad: infoNuevaVenta.cantidad,
+        unidad: infoNuevaVenta.unidad,
         cliente: infoNuevaVenta.cliente,
         vendedor: infoNuevaVenta.vendedor,
         estado: infoNuevaVenta.estado,
@@ -185,7 +262,7 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
         
       },
       (response) => {
-        console.log(response.data);
+        console.log('Venta Editada',response.data);
         toast.success('Venta Modificada Exitosamente');
         setEdit(false);
         setEjecutarConsulta(true);
@@ -195,15 +272,13 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
         console.error(error);
       }
     );
-    
-      
   };
   
   const borrarVenta = async () => {
     await eliminarVenta(
       venta._id,
       (response) => {
-        console.log(response.data);
+        console.log('Venta Eliminada',response.data);
         toast.success('Venta Eliminada Exitosamente');
         setEjecutarConsulta(true);
         
@@ -214,6 +289,42 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
       }
     );  
   };
+
+
+  
+    
+
+  // const [sumaVentas, setSumaVentas] = useState([]);{
+  //     const totalVentas =()=>{
+  //       useEffect(()=>{  
+  //           setSumaVentas (infoNuevaVenta);
+  //           let suma=0;
+  //           sumaVentas.forEach((s)=>{
+  //           suma= suma+sumaVentas.total;
+  //           });
+  //           setSumaVentas (suma);
+  //           console.log ('Total Ventas', totalVentas);
+  //           console.log ('Suma Ventas', suma);
+  //           return suma;
+  //         }, [sumaVentas]);
+  //     };
+  // };
+    
+  // sumaVentas =()=>{
+  //     setSumaVentas (infoNuevaVenta);
+
+  //   }
+  
+    // const sumaVentas = ()=> {
+    //   infoNuevaVenta.map(item => item.total).reduce((prev, curr) => prev + curr, 0);
+    //   console.log('Esta es la Suma de las ventas',sumaVentas);
+    //   return sumaVentas;
+    //};   
+      
+
+  
+ 
+    
   return (
     <tr >
       {edit? (
@@ -233,7 +344,7 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
               name='producto'
               onChange ={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, producto: e.target.value })}
               defaultValue={infoNuevaVenta.producto}>
-                {productos.map((p) => {
+                {listaProductos.map((p) => {
              return (
                <option
                  key={nanoid()}
@@ -250,6 +361,14 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
             className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
             value={infoNuevaVenta.cantidad}
             onChange={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, cantidad: e.target.value })}/>
+          </td>
+
+          <td>
+            <input 
+            type="number" 
+            className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
+            value={infoNuevaVenta.unidad}
+            onChange={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, unidad: e.target.value })}/>
           </td>
 
           <td>
@@ -293,14 +412,11 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
             </select>
           </label>
           </td>
-            
+
           <td>
-            <input 
-            type="number" 
-            className="bg-gray-50 border border-gray-600 p-1 rounded-lg m-1 w-full"
-            value={infoNuevaVenta.total}
-            onChange={(e) => setInfoNuevaVenta({ ...infoNuevaVenta, total: e.target.value })}/>
-            </td>
+            {(infoNuevaVenta.unidad)*(infoNuevaVenta.cantidad)}
+          </td> 
+           
         </>
                 
       ) :(
@@ -309,15 +425,13 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
           <td className=" text-center text-gray-800">{venta.fecha}</td>
           <td className=" text-center text-gray-800">{venta.producto}</td>
           <td className=" text-center text-gray-800">{venta.cantidad}</td>
+          <td className=" text-center text-gray-800">{venta.unidad}</td>
           <td className=" text-center text-gray-800">{venta.cliente}</td>
           <td className=" text-center text-gray-800">{venta.vendedor}</td>
           <td className=" text-center text-gray-800">{venta.estado}</td>
-          <td className=" text-center text-gray-800">{venta.total}</td>
+          <td className=" text-center text-gray-800">{venta.total=(venta.cantidad*venta.unidad)}</td>
       </>  
 
-            
-        
-        
         )}
         <td>
           <div className="flex w-full justify-around text-gray-800 ">
@@ -343,13 +457,11 @@ const FilaVentas = ({venta, setEjecutarConsulta})  => {
                 </PrivateComponent>
               </>
             )} 
-            
           </div>
         </td>
-      
     </tr>
-
   );
+   
 };
 
 const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) => {
@@ -386,6 +498,9 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
 
   const listaVendedores = usuarios.filter(v => (v.rol === 'Vendedor') && (v.estado === 'Activo'));
   const listaClientes = usuarios.filter(c => (c.rol === 'Cliente') && (c.estado === 'Activo'));
+  const listaProductos = productos.filter(p => (p.estado === 'Disponible'));
+
+  
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -403,10 +518,11 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
         fecha: nuevaVenta.fecha,
         producto: nuevaVenta.producto,
         cantidad: nuevaVenta.cantidad,
+        unidad: nuevaVenta.unidad,
         cliente: nuevaVenta.cliente,
         vendedor: nuevaVenta.vendedor,
         estado: nuevaVenta.estado,
-        total: nuevaVenta.total,
+        total: (nuevaVenta.cantidad*nuevaVenta.unidad),
       },
       (response) => {
         console.log(response.data);
@@ -446,7 +562,7 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
            <option disabled value={0}>
              Elija una Opción
            </option>
-           {productos.map((p) => {
+           {listaProductos.map((p) => {
              return (
                <option
                  key={nanoid()}
@@ -466,6 +582,18 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
             min={1}
             max={100}
             placeholder='Ej: 2'
+            required/>
+        </label>
+
+        <label className='flex flex-col py-2 text-gray-800' htmlFor='unidad'>    
+          Valor Unitario
+          <input
+            name='unidad'
+            className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+            type='number'
+            min={100}
+            max={10000}
+            placeholder='Ej: 350'
             required/>
         </label>
 
@@ -517,7 +645,7 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
           </select>
         </label>
         
-        <label className='flex flex-col py-2 text-gray-800' htmlFor='total'>    
+        {/* <label className='flex flex-col py-2 text-gray-800' htmlFor='total'>    
           Total Venta
           <input
             name='total'
@@ -526,12 +654,12 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
             min={200}
             max={5000}
             placeholder='Ej: 230'
-            required/>
-        </label>
+            required/> 
+        </label> */}
         
         <button
           type='submit'
-          className='col-span-2 py-3 fondo1 font-bold  text-gray-300 p-2 rounded-full shadow-md hover:bg-blue-600'>
+          className='col-span-2 py-3 fondo1 font-bold  text-gray-300 p-2 rounded-full shadow-md hover:bg-black'>
           Crear Venta
         </button>
 
@@ -539,5 +667,7 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
     </div>
   );
 };
+
+
 
 export default Ventas;

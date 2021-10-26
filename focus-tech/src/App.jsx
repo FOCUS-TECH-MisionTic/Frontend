@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { Auth0Provider } from "@auth0/auth0-react";
+import PrivateRoute from 'components/PrivateRoute';
 
 //Layouts
 import PrivateLayout from './layouts/PrivateLayout';
@@ -14,7 +15,6 @@ import Productos from './pages/admin/Productos';
 import Ventas from './pages/admin/Ventas';
 import Usuarios from './pages/admin/Usuarios';
 import Error404 from "pages/auth/Error404";
-
 
 //Styles
 import './styles/styles.css'
@@ -47,13 +47,19 @@ function App() {
               <PrivateLayout>
                 <Switch>
                   <Route path='/admin/productos'>
-                    <Productos/>
+                    <PrivateRoute roleList={['Administrador', 'Vendedor', 'Cliente']}>
+                      <Productos/>
+                    </PrivateRoute>
                   </Route>  
                   <Route path='/admin/ventas'>
-                    <Ventas/>
+                    <PrivateRoute roleList={['Administrador', 'Vendedor']}>
+                      <Ventas/>
+                    </PrivateRoute>
                   </Route>
                   <Route path='/admin/usuarios'>
-                    <Usuarios/>
+                    <PrivateRoute roleList={['Administrador']}>
+                      <Usuarios/>
+                    </PrivateRoute>  
                   </Route>
                   <Route path='/admin'>
                     <Admin />
