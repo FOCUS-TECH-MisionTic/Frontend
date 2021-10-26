@@ -7,7 +7,7 @@ import PrivateComponent from 'components/PrivateComponent';
 const Sidebar = () => {
   const { logout } = useAuth0();
   const cerrarSesion = () => {
-    logout({ returnTo: 'http://localhost:3000/' });
+    logout({ returnTo: 'https://polar-anchorage-11845.herokuapp.com/' });
     localStorage.setItem('token', null);
   };
   return (

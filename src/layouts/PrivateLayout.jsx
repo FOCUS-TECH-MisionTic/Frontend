@@ -34,7 +34,7 @@ const PrivateLayout = ({ children }) => {
         (err) => {
           console.log('err', err);
           setLoadingUserInformation(false);
-          logout({ returnTo: 'http://localhost:3000/' });
+          logout({ returnTo: 'https://polar-anchorage-11845.herokuapp.com/' });
         }
       );     
     };    
