@@ -33,7 +33,7 @@ function App() {
     <Auth0Provider
       domain="ezequiellr.us.auth0.com"
       clientId="0b1BbovaR2Sm4kaPTWwnNgr13Fayd0fV"
-      redirectUri="http://localhost:3000/admin"
+      redirectUri="https://polar-anchorage-11845.herokuapp.com/admin"
       audience='autenticacion-focus-tech'>
 
       <div className='App'>
