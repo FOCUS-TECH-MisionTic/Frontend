@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../media/logo.png';
-import { Link, NavLink } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { useAuth0 } from "@auth0/auth0-react";
 import PrivateComponent from 'components/PrivateComponent';
 
