@@ -25,18 +25,18 @@ const PrivateLayout = ({ children }) => {
       localStorage.setItem('token', accessToken);
       console.log(accessToken);
       // 3. enviarle el token a el backend
-      await obtenerDatosUsuario(
-        (response) => {
-          console.log('response con datos del usuario', response);
-          setUserData(response.data);
-          setLoadingUserInformation(false);
-        },
-        (err) => {
-          console.log('err', err);
-          setLoadingUserInformation(false);
-          logout({ returnTo: 'https://polar-anchorage-11845.herokuapp.com/' });
-        }
-      );     
+      // await obtenerDatosUsuario(
+      //   (response) => {
+      //     console.log('response con datos del usuario', response);
+      //     setUserData(response.data);
+      //     setLoadingUserInformation(false);
+      //   },
+      //   (err) => {
+      //     console.log('err', err);
+      //     setLoadingUserInformation(false);
+      //     logout({ returnTo: 'https://polar-anchorage-11845.herokuapp.com/' });
+      //   }
+      // );     
     };    
     if (isAuthenticated) {
       fetchAuth0Token();
