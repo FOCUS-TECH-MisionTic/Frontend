@@ -1,7 +1,6 @@
 import React from "react";
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { Auth0Provider } from "@auth0/auth0-react";
-import PrivateRoute from 'components/PrivateRoute';
 
 //Layouts
 import PrivateLayout from './layouts/PrivateLayout';
@@ -15,6 +14,7 @@ import Productos from './pages/admin/Productos';
 import Ventas from './pages/admin/Ventas';
 import Usuarios from './pages/admin/Usuarios';
 import Error404 from "pages/auth/Error404";
+
 
 //Styles
 import './styles/styles.css'
@@ -33,7 +33,7 @@ function App() {
     <Auth0Provider
       domain="ezequiellr.us.auth0.com"
       clientId="0b1BbovaR2Sm4kaPTWwnNgr13Fayd0fV"
-      redirectUri="https://polar-anchorage-11845.herokuapp.com/admin"
+      redirectUri="http://localhost:3000/admin"
       audience='autenticacion-focus-tech'>
 
       <div className='App'>
@@ -47,19 +47,13 @@ function App() {
               <PrivateLayout>
                 <Switch>
                   <Route path='/admin/productos'>
-                    <PrivateRoute roleList={['Administrador', 'Vendedor', 'Cliente']}>
-                      <Productos/>
-                    </PrivateRoute>
+                    <Productos/>
                   </Route>  
                   <Route path='/admin/ventas'>
-                    <PrivateRoute roleList={['Administrador', 'Vendedor']}>
-                      <Ventas/>
-                    </PrivateRoute>
+                    <Ventas/>
                   </Route>
                   <Route path='/admin/usuarios'>
-                    <PrivateRoute roleList={['Administrador']}>
-                      <Usuarios/>
-                    </PrivateRoute>  
+                    <Usuarios/>
                   </Route>
                   <Route path='/admin'>
                     <Admin />

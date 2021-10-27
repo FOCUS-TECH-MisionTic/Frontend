@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const baseURL = "http://localhost:5000";
-const baseURL = 'https://protected-chamber-18695.herokuapp.com';
+const baseURL = "http://localhost:5000";
+//const baseURL = 'https://.herokuapp.com';
 
 const getToken = () => {
   return `Bearer ${localStorage.getItem('token')}`;
@@ -65,7 +65,8 @@ export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
     method: 'GET',
     url: `${baseURL}/usuarios/self/`,
     headers: {
-      Authorization: getToken(), // 3. enviarle el token a backend
+      Authorization: getToken(), 
+      // Enviarle el token a backend
     },
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
@@ -124,3 +125,6 @@ export const eliminarVenta = async (id, successCallback, errorCallback) => {
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
+
+
+

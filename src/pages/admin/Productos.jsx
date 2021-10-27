@@ -55,7 +55,7 @@ const Productos = () => {
           onClick={() => {
             setMostrarTabla(!mostrarTabla);
           }}
-          className={`shadow-md fondo1 text-gray-300 font-bold p-2 rounded m-6  self-center hover:bg-black`}>
+          className={`shadow-md fondo1 text-gray-300 font-bold p-2 rounded m-6  self-center`}>
           {textoBoton}
         </button>
         </PrivateComponent>
@@ -400,7 +400,7 @@ const FormularioCreacionProductos = ({ setMostrarTabla, listaProductos, setProdu
         </label>
         <button
           type='submit'
-          className='col-span-2 py-3 fondo1 font-bold  text-gray-300 p-2 rounded-full shadow-md hover:bg-black '
+          className='col-span-2 py-3 fondo1 font-bold  text-gray-300 p-2 rounded-full shadow-md hover:bg-blue-600'
         >
           Guardar Producto
         </button>
