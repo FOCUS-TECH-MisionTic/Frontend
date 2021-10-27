@@ -60,16 +60,16 @@ export const obtenerUsuarios = async (successCallback, errorCallback) => {
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
 
-// export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
-//   const options = {
-//     method: 'GET',
-//     url: "https://protected-chamber-18695.herokuapp.com/usuarios/self/",
-//     headers: {
-//       Authorization: getToken(), // 3. enviarle el token a backend
-//     },
-//   };
-//   await axios.request(options).then(successCallback).catch(errorCallback);
-// };
+export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
+  const options = {
+    method: 'GET',
+    url: "https://protected-chamber-18695.herokuapp.com/usuarios/self/",
+    headers: {
+      Authorization: getToken(), // 3. enviarle el token a backend
+    },
+  };
+  await axios.request(options).then(successCallback).catch(errorCallback);
+};
 
 
 export const editarUsuario = async (id, data, successCallback, errorCallback) => {

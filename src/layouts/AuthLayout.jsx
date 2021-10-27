@@ -1,7 +1,6 @@
 import React from 'react';
 import NavAuth from '../components/NavbarAuth';
 import Footer from '../components/Footer'
-import { Link } from 'react-router-dom';
 import '../styles/styles.css'
 
 
