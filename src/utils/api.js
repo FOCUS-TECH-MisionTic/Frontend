@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // const baseURL = "http://localhost:5000";
-const baseURL = 'https://protected-chamber-18695.herokuapp.com/';
+const baseURL = 'https://protected-chamber-18695.herokuapp.com';
 
 const getToken = () => {
   return `Bearer ${localStorage.getItem('token')}`;
@@ -10,7 +10,7 @@ const getToken = () => {
 export const obtenerProductos = async (successCallback, errorCallback) => {
   const options = {
     method: 'GET',
-    url: "https://protected-chamber-18695.herokuapp.com/productos/",
+    url: `${baseURL}/productos/`,
     headers: {
       Authorization: getToken(),
     },
@@ -21,7 +21,7 @@ export const obtenerProductos = async (successCallback, errorCallback) => {
 export const crearProducto = async (data, successCallback, errorCallback) => {
   const options = {
     method: 'POST',
-    url: "https://protected-chamber-18695.herokuapp.com/productos/",
+    url: `${baseURL}/productos/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
@@ -31,7 +31,7 @@ export const crearProducto = async (data, successCallback, errorCallback) => {
 export const editarProducto = async (id, data, successCallback, errorCallback) => {
   const options = {
     method: 'PATCH',
-    url: `https://protected-chamber-18695.herokuapp.com/productos/${id}/`,
+    url: `${baseURL}/productos/${id}/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
@@ -41,7 +41,7 @@ export const editarProducto = async (id, data, successCallback, errorCallback) =
 export const eliminarProducto = async (id, successCallback, errorCallback) => {
   const options = {
     method: 'DELETE',
-    url: `https://protected-chamber-18695.herokuapp.com/productos/${id}/`,
+    url: `${baseURL}/productos/${id}/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
@@ -52,7 +52,7 @@ export const eliminarProducto = async (id, successCallback, errorCallback) => {
 export const obtenerUsuarios = async (successCallback, errorCallback) => {
   const options = {
     method: 'GET',
-    url: "https://protected-chamber-18695.herokuapp.com/usuarios/",
+    url: `${baseURL}/usuarios/`,
     headers: {
       Authorization: getToken(),
     },
@@ -63,7 +63,7 @@ export const obtenerUsuarios = async (successCallback, errorCallback) => {
 export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
   const options = {
     method: 'GET',
-    url: "https://protected-chamber-18695.herokuapp.com/usuarios/self/",
+    url: `${baseURL}/usuarios/self/`,
     headers: {
       Authorization: getToken(), // 3. enviarle el token a backend
     },
@@ -75,7 +75,7 @@ export const obtenerDatosUsuario = async (successCallback, errorCallback) => {
 export const editarUsuario = async (id, data, successCallback, errorCallback) => {
   const options = {
     method: 'PATCH',
-    url: `https://protected-chamber-18695.herokuapp.com/usuarios/${id}/`,
+    url: `${baseURL}/usuarios/${id}/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
@@ -87,7 +87,7 @@ export const editarUsuario = async (id, data, successCallback, errorCallback) =>
 export const obtenerVentas = async (successCallback, errorCallback) => {
   const options = { 
     method: 'GET',
-    url: "https://protected-chamber-18695.herokuapp.com/ventas",
+    url: `${baseURL}/ventas`,
     headers: {
       Authorization: getToken(),
     },
@@ -99,7 +99,7 @@ export const obtenerVentas = async (successCallback, errorCallback) => {
 export const crearVenta = async (data, successCallback, errorCallback) => {
   const options = {
     method: 'POST',
-    url: "https://protected-chamber-18695.herokuapp.com/ventas/",
+    url: `${baseURL}/ventas/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
@@ -109,7 +109,7 @@ export const crearVenta = async (data, successCallback, errorCallback) => {
 export const editarVenta = async (id, data, successCallback, errorCallback) => {
   const options = {
     method: 'PATCH',
-    url: `https://protected-chamber-18695.herokuapp.com/ventas/${id}/`,
+    url: `${baseURL}/ventas/${id}/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
     data,
   };
@@ -119,11 +119,8 @@ export const editarVenta = async (id, data, successCallback, errorCallback) => {
 export const eliminarVenta = async (id, successCallback, errorCallback) => {
   const options = {
     method: 'DELETE',
-    url: `https://protected-chamber-18695.herokuapp.com/ventas/${id}/`,
+    url: `${baseURL}/ventas/${id}/`,
     headers: { 'Content-Type': 'application/json', Authorization: getToken() },
   };
   await axios.request(options).then(successCallback).catch(errorCallback);
 };
-
-
-
